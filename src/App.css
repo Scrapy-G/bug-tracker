@@ -1,0 +1,117 @@
+@import 'bootstrap/dist/css/bootstrap.min.css';
+
+body {
+  background: rgb(25, 26, 27);
+  color: rgb(194, 187, 180);
+}
+
+/*----------generic--------*/
+
+input[type='text'], input[type='password'] {
+  display: block;
+  font-size: 1.2em;
+  width: 100%;
+  border: 1px solid #a59b83;
+  color: #a59b83;
+  padding: 5px;
+  border-radius: 3px;
+  background: none;
+}
+
+a {
+  text-decoration: none;
+  color: #a59b83;
+}
+
+a:hover {
+  color: orange;
+}
+
+
+select {
+  text-transform: capitalize;
+}
+
+.primary-button {
+  background-color: orange;
+  font-weight: bold;
+}
+
+.pill {
+  background: rgb(90, 143, 122);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px 0;
+  text-transform: capitalize;
+}
+
+.round {
+  border-radius: 50px;
+}
+
+/*----------navbar--------*/
+
+.navbar {
+  background: rgb(38, 40, 43);
+  height:70px;
+}
+
+.navbar span {
+  text-align: center;
+  margin-right: 30px;
+  min-width: 150px;
+}
+
+.navbar .navbar-brand {
+  font-weight: bold;
+}
+
+
+/*----------issue-table--------*/
+
+.detail-table>div, .report-form>div{
+  padding: 15px 0;
+  border-bottom: 1px solid darkgray;
+}
+
+.page-title {
+  background: darkgray;
+  margin: 50px 0;
+  border-radius: 5px;
+}
+
+.log-container {
+  max-height: 400px;
+  overflow: scroll;
+  overflow-x: hidden;
+  border: 1px solid gray;
+  padding: 5px;
+}
+
+.controls button {
+  margin-right: 10px;
+}
+
+.login {
+  padding: 50px;
+  max-width: 500px;
+  text-align: center;
+  border-radius: 5px;
+  background: rgb(38, 40, 43);
+  margin: 100px auto;
+}
+
+.login input {
+  text-align: center;
+}
+
+.login label {
+  margin: 30px 0 10px 0;
+}
+
+.login button {
+  margin-top: 30px;
+  width: 150px;
+}
