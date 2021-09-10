@@ -5,51 +5,18 @@ import ReportBug from './pages/ReportBug';
 import { BrowserRouter as Router, Redirect, Route } from 'react-router-dom';
 import { Header } from './components/Header';
 import { Login } from './components/Login';
-import { Component, createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useState } from 'react';
 
 export const authContext = createContext();
 
 function App() {
 
-  const [isAuth, setAuth] = useState(false);
-  console.log(isAuth);
-  useEffect(() => {
-    fetch('http://localhost/bugtracker/checkuser.php')
-    .then(response => response.text())
-    .then(response => {
-      console.log("useEffect: ", response);
-      if(response !== 'false') {
-        setAuth(true);
-      }
-    })
-  }, []);
-
-  async function authenticate(formData) {
-    return fetch('http://localhost/bugtracker/login.php', {
-        method: 'post',
-        body: formData
-    })
-    .then(response => response.text())
-    .then((response => {
-        console.log(response);
-        if(response == 'success'){
-            setAuth(true);
-        }}))
-    .catch(error => console.log(error));
-  }
-
-  const logout = () => {
-    fetch('http://localhost/bugtracker/logout.php')
-    .then(response => response.text())
-    .then(setAuth(false))
-    .then(<Redirect to='/login' />);
-
-    console.log("logout: ", isAuth);
-  }
+  //user is logged in if token in local storage
+  const [user, setUser] = useState(localStorage.getItem('token') ? true : false);
 
   const ProvideAuth = ({children}) => {
     return (
-      <authContext.Provider value={{isAuth, authenticate, logout}}>
+      <authContext.Provider value={{ user, setUser }}>
         {children}
       </authContext.Provider>
     )
@@ -59,22 +26,23 @@ function App() {
     <Route
       {...rest}
       render = {props =>
-        isAuth ? (<Component {...props} />) :
-        (<Redirect to={{pathname:'/login'}} />)}
+        user ? (<Component {...props} />) :
+        (<Redirect to={{pathname:`${process.env.PUBLIC_URL}/login`}} />)}
     />
   )
 
   return (
     <div className="App">
       <ProvideAuth>
-        <Router>
-          <Route path='/'><Header/></Route>
-          <Route path='/login'>
+        <Router basename='/apps/issuetracker'>
+          <Route path={`${process.env.PUBLIC_URL}/`}><Header/></Route>
+          <Route path={`${process.env.PUBLIC_URL}/login`}>
             <Login />
           </Route>
-          <Route path='/' exact component={Dashboard}/>
-          <PrivateRoute path='/issue/:id' component={IssueDetail} />
-          <Route path='/report' component={ReportBug} />
+          <PrivateRoute path={`${process.env.PUBLIC_URL}/dashboard`} exact component={Dashboard}/>
+          <PrivateRoute path={`${process.env.PUBLIC_URL}/`} exact component={Dashboard}/>
+          <PrivateRoute path={`${process.env.PUBLIC_URL}/issue/:id`} component={IssueDetail} />
+          <Route path={`${process.env.PUBLIC_URL}/report`} component={ReportBug} />
         </Router>
       </ProvideAuth>
     </div>

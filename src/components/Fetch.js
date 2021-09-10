@@ -19,12 +19,11 @@ export default function Fetch ( {
     )
 }) {
 
-    const { loading, data, error } = useFetch(`${uri}`);
+    const { loading, data, error } = useFetch(`${uri}`, localStorage.getItem('token'));
    
-
-    if (error) return renderError(error);  
-    if (loading) return loadingFallback;       
-    if(data.status_code === 7) return ("Error " + data.status_message)
+    if (error) return renderError(error);
+    if (loading) return loadingFallback;
+    if (data.status_code === 7) return ("Error " + data.status_message)
     if (data) return renderSuccess({data});
     
 }

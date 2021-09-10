@@ -1,79 +1,115 @@
 import { Row, Col, Container, Button } from 'react-bootstrap';
-import { Dropdown } from '../components/Dropdown';
-import { useReducer, useState } from 'react';
+import { useState } from 'react';
+import Fetch from '../components/Fetch';
 
 export default function ReportBug () {
 
-    const [message, setMessage] = useState("");
-    const [showMessage, setShowMessage] = useState(false);
+    const [message, setMessage] = useState();
 
     const renderMessage = () => {
         if(message.error){
-            console.log(message);
             return (
                 <div className='alert alert-danger'>
-                    <strong>Error!</strong> {message.error} - Try again later...
+                    <strong>Error!</strong> {message.error}
                 </div>
             );
         }else {
             return (
                 <div id='alert' className='alert alert-success'>
-                    <strong>Submitted!</strong> ID: {message.id}
+                    <strong>Submitted!</strong> Issue ID: {message.id}
                 </div>
             );
         }     
     }
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        const formData = new FormData(e.target);
+        const form = e.target
         
-        fetch('http://localhost/bugtracker/', {
+        const issue = JSON.stringify({
+            subject: form.subject.value,
+            type: form.type.value,
+            description: form.description.value
+        });
+
+        const result = await postIssue(issue);
+
+        setMessage(result);
+    }
+
+    const postIssue = (issue) => {
+        
+        return fetch('https://chadcodes.me/apps/issuetracker/api/postIssue.php',
+        {
             method: 'post',
-            body: formData
+            headers: new Headers({
+                Authorization: 'Bearer ' + localStorage.getItem('token')
+            }),
+            body: issue
         })
         .then(response => response.json())
-        .then(setMessage)
-        .then(setShowMessage(true))
-        .then(e.target.reset())
-        .catch(e => setMessage(e));
+        .then(response => {
+            return response;
+        })
+        .catch(e => {
+            return {
+                error: e.message
+            }
+        });
+    }
+
+    const renderDropdown = ( data ) => {
+        const types = data.data;
+        return (
+            <select name='type' className='form-select'>
+                {types.map((type, i) => {
+                    return <option key={i} value={type.id}>
+                            {type.description}
+                        </option>
+                    
+                })}
+            </select>
+        )
     }
 
     return (
         <Container>
             <h1 className='mt-4 mb-4'>Report Bug</h1>           
             <form className='report-form' onSubmit={handleSubmit}>
-                <Row>
+                <Row className='pb-3'>
                     <Col sm={3}>
                         Subject
                     </Col>
                     <Col sm={9}>
                         <input 
                             type='text' 
-                            name='issue-subject' 
+                            name='subject' 
                             className='form-control'
-                            placeholder='subject'
+                            placeholder='Subject'
                             required
                         />
                     </Col>
                 </Row>
-                <Row>
+                <Row className='pb-3'>
                     <Col md={3}>
                         Type
                     </Col>
                     <Col md={9}>
-                        <Dropdown uri={'http://localhost/bugtracker/?typelist=1'}/>
+                        <Fetch
+                            uri='https://chadcodes.me/apps/issuetracker/api/readTypes.php'
+                            renderSuccess={renderDropdown}
+                        />
                     </Col>
                 </Row>
-                <Row>
+                <Row className='pb-3'>
                     <Col md={3}>
                         Description
                     </Col>
                     <Col md={9}>
                         <textarea 
-                            name='issue-description' 
+                            name='description' 
                             className='form-control'
-                            placeholder='subject'
+                            placeholder='Description'
                             required
                         ></textarea>
                     </Col>
@@ -81,7 +117,7 @@ export default function ReportBug () {
                 <div className='d-flex justify-content-end'>
                     <Button type='submit'>Submit</Button>   
                 </div>
-                {showMessage && renderMessage()}                
+                {message && renderMessage()}                
             </form>
         </Container>
     )

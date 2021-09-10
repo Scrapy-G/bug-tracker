@@ -1,34 +1,42 @@
 import { useContext } from "react";
-import { Container, Nav, Navbar } from "react-bootstrap";
-import { Link, Redirect } from 'react-router-dom';
+import { Container, Navbar } from "react-bootstrap";
+import { Link, useHistory } from 'react-router-dom';
 import { authContext } from "../App";
 
 export function Header () {
 
-    const { isAuth, logout } = useContext(authContext);
+    const { user, setUser } = useContext(authContext);
+    const history = useHistory();
+
+    const logout = () => {
+        localStorage.removeItem('token');
+        setUser(null);
+        history.push(`${process.env.PUBLIC_URL}/login`);
+    }
 
     return (
         <Navbar>
             <Container>
-                <Navbar.Brand>
-                    <Link to='/'>BugTracker</Link>
+                <Navbar.Brand className='brand'>
+                    <Link to={`${process.env.PUBLIC_URL}/dashbard`}>BugTracker</Link>
                 </Navbar.Brand>
                 <Navbar.Collapse className="justify-content-end">
-                    {isAuth && <>
-                        <span>
-                            <Link to='/'>Dashboard</Link>
-                        </span>
-                        <span>
-                            <a onClick={logout} href="#">Logout</a>
-                        </span>                        
+                    {/* different options in header if user is already logged in */}
+                    {user ? <>
+                        <Navbar.Text>
+                            <Link to={`${process.env.PUBLIC_URL}/dashboard`}>Dashboard</Link>
+                        </Navbar.Text>
+                        <Navbar.Text>
+                            <button className='btn btn-secondary'onClick={logout}>Logout</button>
+                        </Navbar.Text>                       
                         </>
-                    ||
-                        <span>
-                            <Link to='/login'><span>Log In</span></Link>
-                        </span>
+                    :
+                        <Navbar.Text>
+                            <Link to={`${process.env.PUBLIC_URL}/login`}>Log In</Link>
+                        </Navbar.Text>
                     }
                     <Link to='/report'>
-                        <button className='btn primary-button' >Report Issue</button>
+                        <button className='btn primary-button' >Report</button>
                     </Link>
                 </Navbar.Collapse>
             </Container>

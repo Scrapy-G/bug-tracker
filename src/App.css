@@ -1,13 +1,13 @@
 @import 'bootstrap/dist/css/bootstrap.min.css';
 
 body {
-  background: rgb(25, 26, 27);
-  color: rgb(194, 187, 180);
+  background: #c2c2c2;
+  color: #272727;
 }
 
 /*----------generic--------*/
 
-input[type='text'], input[type='password'] {
+.login input[type='text'], .login input[type='password'] {
   display: block;
   font-size: 1.2em;
   width: 100%;
@@ -20,11 +20,6 @@ input[type='text'], input[type='password'] {
 
 a {
   text-decoration: none;
-  color: #a59b83;
-}
-
-a:hover {
-  color: orange;
 }
 
 
@@ -54,45 +49,31 @@ select {
 /*----------navbar--------*/
 
 .navbar {
-  background: rgb(38, 40, 43);
+  background: #26282b;
+  color: #c7b488;
   height:70px;
 }
 
 .navbar span {
   text-align: center;
-  margin-right: 30px;
-  min-width: 150px;
+  margin: 0 20px;
 }
 
 .navbar .navbar-brand {
   font-weight: bold;
+  margin: 0;
 }
 
-
-/*----------issue-table--------*/
-
-.detail-table>div, .report-form>div{
-  padding: 15px 0;
-  border-bottom: 1px solid darkgray;
+.navbar a, .navbar-text a {
+  text-decoration: none;
+  color: #c7b488 !important;
 }
 
-.page-title {
-  background: darkgray;
-  margin: 50px 0;
-  border-radius: 5px;
+.navbar a:hover {
+  color: orange;
 }
 
-.log-container {
-  max-height: 400px;
-  overflow: scroll;
-  overflow-x: hidden;
-  border: 1px solid gray;
-  padding: 5px;
-}
-
-.controls button {
-  margin-right: 10px;
-}
+/*******login************/
 
 .login {
   padding: 50px;
@@ -100,7 +81,23 @@ select {
   text-align: center;
   border-radius: 5px;
   background: rgb(38, 40, 43);
+  color: #fff;
   margin: 100px auto;
+}
+
+.login .credentials {
+  color: #acacac;
+  border: 1px solid;
+  border-radius: 5px;
+  padding: 10px;
+}
+
+.credentials h5{
+  text-decoration: underline;
+}
+
+.credentials p {
+  margin: 0;
 }
 
 .login input {
@@ -114,4 +111,247 @@ select {
 .login button {
   margin-top: 30px;
   width: 150px;
+}
+
+/*******Issue detail******/
+
+.page-title {
+  color: #fff;
+  margin-bottom: 20px;
+}
+
+.page-title a {
+  display: inline-block;
+  color: #fff;
+  font-size: 16px;
+  background-color: #26282b;
+  border-radius: 5px;
+  padding: 5px 10px;
+  text-decoration: none;
+  margin-bottom: 20px;
+}
+
+.page-title.release {
+  background-color: #33b8cf;
+}
+
+.page-title.bug {
+  background-color: #b95c5c;
+}
+
+.page-title.test {
+  background-color: #575757;
+}
+
+.page-title.update {
+  background-color: #65af65;
+}
+
+.detail-items h5{
+  font-weight: bold;
+  color: #474747;
+  font-size: 17px;
+}
+
+.detail-items div {
+  margin-bottom: 20px;
+}
+
+/***log****/
+
+.log-container, .logs textarea {
+  border: 1px solid rgb(145, 145, 145);
+  padding: 5px;
+  border-radius: 5px;  
+}
+
+.log-container {
+  background-color:#b4b4b4;
+  max-height: 500px;
+  overflow-y: scroll;
+}
+
+.logs textarea {
+  width: 100%;
+  background-color:#d1d1d1;
+}
+
+.log-item .datetime {
+  font-size: 0.95em;
+  opacity: 0.8;
+  margin: 0;
+}
+
+/**********Issue list page**********/
+
+.issue-list a {
+  color: inherit;
+}
+
+.issue {
+  background: #dadada;
+  position: relative;
+  padding: 20px 20px 20px 40px;
+  margin: 20px 10px;
+  cursor: pointer;
+  transition: all .3s;
+  -webkit-transition: all .3s;
+}
+
+.issue:hover {
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1);
+  transform: translate(-5px, -5px);
+}
+
+.clipped {   
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;     
+}
+
+.issue .type-color{
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 20px;
+  height: 100%;
+}
+
+.type-color.release {
+  background-color: #33a3cf;
+}
+
+.type-color.bug {
+  background-color: #c74747;
+}
+
+.type-color.update {
+  background-color: #29b765;
+}
+
+.type-color.test {
+  background-color: #575757;
+}
+
+.status, .issue-type {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-transform: capitalize;
+  color: white;
+  width: 150px;
+  font-size: 16px;
+  height: 40px;
+  border-radius: 25px;
+}
+
+.status.open {
+  background-color: #c77121;
+}
+
+.status.closed {
+  background-color: #3a3a3a;
+}
+
+.status.in.progress {
+  background-color: #33a3cf;
+}
+
+.status.resolved {
+  background-color: #2ab865;
+}
+
+.date, .description {
+  opacity: 0.9;
+}
+
+@import url(https://fonts.googleapis.com/css?family=Lato:300,400,900);
+* {
+  box-sizing: border-box;
+}
+
+
+.status-buttons {
+  margin: 0 auto;
+}
+
+.status-buttons li {
+  list-style: none;
+  display: inline-block;
+}
+
+.status-buttons input[type='submit'] {
+  padding: 10px 20px;
+  border-radius: 50px;
+  border: none;
+  background-color: #26282b;
+  color: #fff;
+}
+
+.button-label {
+  display: inline-block;
+  text-transform: capitalize;
+  padding: 10px 20px;
+  margin: 0.2em;
+  cursor: pointer;
+  color: #292929;
+  border-radius: 0.25em;
+  background: #efefef;
+  transition: 0.3s;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+
+.button-label h1 {
+  font-size: 1em;
+  font-family: "Lato", sans-serif;
+}
+
+.button-label:hover {
+  background: #d6d6d6;
+  color: #101010;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2), inset 0 -3px 0 rgba(0, 0, 0, 0.32);
+}
+
+.button-label:active {
+  transform: translateY(2px);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2), inset 0px -1px 0 rgba(0, 0, 0, 0.22);
+}
+
+#button-1:checked + .button-label {
+  background: #c77121;
+  color: #efefef;
+}
+
+#button-2:checked + .button-label {
+  background: #33a3cf;
+  color: #efefef;
+}
+
+#button-3:checked + .button-label {
+  background: #2ab865;
+  color: #efefef;
+}
+
+#button-4:checked + .button-label {
+  background: #3a3a3a;
+  color: #efefef;
+}
+
+.hidden {
+  display: none;
+} 
+
+/*********report bug**********/
+
+.report-bug input, .report-bug textarea{
+  background: none;
+}
+
+.search button {
+  width: 150px;
+  margin-top: 10px;
 }

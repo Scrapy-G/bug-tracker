@@ -1,71 +1,61 @@
-import { Button } from "react-bootstrap";
-import { Container, Row, Col } from "react-bootstrap";
-import { useParams, Redirect } from "react-router-dom";
+import { Container, Col } from "react-bootstrap";
+import { useParams, Link } from "react-router-dom";
 import { Logs } from '../components/Logs';
-import { useFetch } from "../components/useFetch";
 import { ChangeStatus } from '../components/ChangeStatus';
-import Loader from "react-loader-spinner";
-import { useContext } from "react";
-import { authContext } from "../App";
+import { useRef } from "react";
+import Fetch from "../components/Fetch";
 
 export default function IssueDetail () {
-    
+
     const { id } = useParams();
-    const { loading, error, data } = useFetch(`http://localhost/bugtracker/?issues=1&id=${id}`);
+    const status = useRef(); //to update status
 
-    if(loading) return (
-        <Loader 
-        type="ThreeDots"
-        color="white"
-        height={20}
-        width={50}
-    />);
+    const renderIssueDetail = (data) => {
 
-    //HANDLE ERROR HERE
+        const issueInfo = data.data;
+        
+        return (
+            <Container fluid className='issue-detail p-0'>        
+                <div className={'page-title pt-4 pb-4 ' + issueInfo.type}>
+                    <Container>
+                        <Link to={`${process.env.PUBLIC_URL}/dashbard`}>Back to Dashboard</Link>
+                        <h1>{issueInfo.subject}</h1>
+                        <p>ID: {id}</p>
+                    </Container>
+                </div>  
+                <Container>
+                    <div className='detail-items'>                    
+                        <Col xs={12}>
+                            <h5>Type</h5>
+                            <p className={'issue-type type-color ' + issueInfo.type}>{issueInfo.type}</p>
+                        </Col>
+                        <Col xs={12}>
+                            <h5>Status</h5>
+                            <p ref={status} className={'status type-color ' + issueInfo.status}>{issueInfo.status}</p>
+                            <Fetch 
+                                uri='https://chadcodes.me/apps/issuetracker/api/readStatus.php'
+                                renderSuccess={(data) => <ChangeStatus issueId={id} statusData={data.data} statusHTML={status}/>}
+                            />
+                        </Col>
+                        <Col xs={12}>
+                            <h5>Description</h5>
+                            <p className='lead'>{issueInfo.description}</p>
+                        </Col>
+                        <Fetch 
+                            uri={`https://chadcodes.me/apps/issuetracker/api/readLog.php?id=${id}`} 
+                            renderSuccess={(data) => <Logs data={data.data} id={id}/>}
+                        />
+        
+                    </div>
+                </Container>
+            </Container>
+        )
+    }
 
     return (
-        <Container className='issue-detail pb-4'>
-            <Row>
-                <Col className='page-title'>
-                    <h1 className='mt-4'>Issue Detail</h1>
-                    <p>ID: {id}</p>
-                </Col>
-            </Row>
-            <div className='detail-table'>
-                <Row>
-                    <Col sm={3}>
-                        Type
-                    </Col>
-                    <Col sm={9}>
-                        <div className='pill round'>{data.type}</div>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col sm={3}>
-                        Status
-                    </Col>
-                    <Col sm={9}>
-                        <ChangeStatus issueId={id} currentStatus={data.status_id}/>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col sm={3}>
-                        Subject
-                    </Col>
-                    <Col sm={9}>
-                        {data.subject}
-                    </Col>
-                </Row>
-                <Row>
-                    <Col sm={3}>
-                        Description
-                    </Col>
-                    <Col sm={9}>
-                        {data.issue}
-                    </Col>
-                </Row>
-            </div>
-            <Logs id={id} />
-        </Container>
-    )
+        <Fetch 
+            uri={`https://chadcodes.me/apps/issuetracker/api/readIssue.php?id=${id}`} 
+            renderSuccess={renderIssueDetail}
+        />
+    );
 }

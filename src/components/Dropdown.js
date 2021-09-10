@@ -27,7 +27,6 @@ export function Dropdown ({ uri, handleError = f => f }) {
             />
         );
 
-
     return (
         <select name='issue-type' className='form-select' data-style='btn-success'>
             {data.map((item, i) => {
@@ -38,4 +37,5 @@ export function Dropdown ({ uri, handleError = f => f }) {
             })}
         </select>
     );
+
 }

@@ -1,44 +1,66 @@
 import { useContext, useState } from "react"
-import { MdSettingsApplications } from "react-icons/md";
-import { Redirect } from "react-router";
+import { Redirect } from "react-router-dom";
 import { authContext } from '../App';
 
-export function Login ({ setAuth }) {
+export function Login () {
 
+    //controlled inputs
     const [username, setUsername] = useState('');
-    const [pass, setPass] = useState('');
-    const [failed, setFail] = useState();
-    const {isAuth, authenticate} = useContext(authContext);
+    const [password, setPass] = useState('');
 
-    const [session, setSession] = useState();
+    const [errorMessage, setErrorMessage] = useState();
+    const { user, setUser } = useContext(authContext);
 
-    if(isAuth) return <Redirect to='/' />
+    //already signed in
+    if(user) return <Redirect to={`${process.env.PUBLIC_URL}/dashboard`} />
 
-    async function handleSubmit () {
-        const formData = new FormData();
-        formData.append('username', username);
-        formData.append('password', pass);
-        
-        const authPromise = await authenticate(formData);
-        // setFail(!isAuth);
-    }    
+    async function authenticate(user, pass) {
 
-    const getSession = () => {
-        fetch('http://localhost/bugtracker/session.php')
-        .then(res => res.text())
-        .then(setSession)
-        .then(console.log(session))
+        const login = {
+            username: user,
+            password: pass
+        }
+
+        const result = await verifyLogin(login);
+
+        if(result.error){
+            setErrorMessage(result.error);
+        }else {
+            storeSession(result.token);
+            setUser(user);
+        }
     }
 
-    const checkSession = () => {
-        fetch('http://localhost/bugtracker/testsession.php')
-        .then(res => res.text())
-        .then(console.log);
+    const storeSession = (token) => {
+        localStorage.setItem('token', token);
+        return true;
+    }    
+
+    const verifyLogin = (login) => {
+
+        return fetch("https://chadcodes.me/apps/issuetracker/authenticate.php", {
+            method: 'post',
+            body: JSON.stringify(login)
+        })
+        .then(response => response.json())
+        .then(response => {
+            return response;
+        })
+        .catch(e => {
+            return {
+                error: e.message
+            }
+        });
     }
 
     return (
         <div className='login'>
             <h1>Login</h1>
+            <div className='credentials'>
+                <h5>Test login</h5>
+                <p>username: user</p>
+                <p>password: password</p>
+            </div>            
             <label htmlFor='username'>Username</label>
             <input 
                 id='username' 
@@ -50,11 +72,11 @@ export function Login ({ setAuth }) {
             <input 
                 id='password' 
                 type='password' 
-                value={pass}
+                value={password}
                 onChange={e => setPass(e.target.value)}
             />
-            <button className='btn primary-button' onClick={handleSubmit}>Login</button>
-            {failed && <div className='alert alert-danger mt-4'>Username/password invalid</div>}
+            <button className='btn primary-button' onClick={() => authenticate(username, password)}>Login</button>
+            {errorMessage && <div className='alert alert-danger mt-4'>{errorMessage}</div>}
         </div>
     )
 }
