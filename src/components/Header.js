@@ -11,29 +11,28 @@ export function Header () {
     const logout = () => {
         localStorage.removeItem('token');
         setUser(null);
-        history.push(`${process.env.PUBLIC_URL}/login`);
+        history.push('/login');
     }
 
     return (
         <Navbar>
             <Container>
-                <Navbar.Brand className='brand'>
-                    <Link to={`${process.env.PUBLIC_URL}/dashbard`}>BugTracker</Link>
+                <Navbar.Brand>
+                    <Link to='/dashboard'>
+                        {user ? 'Dashboard' : 'BugTracker' }
+                    </Link>
                 </Navbar.Brand>
                 <Navbar.Collapse className="justify-content-end">
                     {/* different options in header if user is already logged in */}
-                    {user ? <>
-                        <Navbar.Text>
-                            <Link to={`${process.env.PUBLIC_URL}/dashboard`}>Dashboard</Link>
-                        </Navbar.Text>
+                    {user ?                      
                         <Navbar.Text>
                             <button className='btn btn-secondary'onClick={logout}>Logout</button>
                         </Navbar.Text>                       
-                        </>
                     :
                         <Navbar.Text>
-                            <Link to={`${process.env.PUBLIC_URL}/login`}>Log In</Link>
+                            <Link to='/login'>Log In</Link>
                         </Navbar.Text>
+                        
                     }
                     <Link to='/report'>
                         <button className='btn primary-button' >Report</button>

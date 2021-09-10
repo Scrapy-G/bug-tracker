@@ -27,7 +27,7 @@ function App() {
       {...rest}
       render = {props =>
         user ? (<Component {...props} />) :
-        (<Redirect to={{pathname:`${process.env.PUBLIC_URL}/login`}} />)}
+        (<Redirect to='/login' />)}
     />
   )
 
@@ -35,14 +35,14 @@ function App() {
     <div className="App">
       <ProvideAuth>
         <Router basename='/apps/issuetracker'>
-          <Route path={`${process.env.PUBLIC_URL}/`}><Header/></Route>
-          <Route path={`${process.env.PUBLIC_URL}/login`}>
+          <Route path='/'><Header/></Route>
+          <Route path='/login'>
             <Login />
           </Route>
-          <PrivateRoute path={`${process.env.PUBLIC_URL}/dashboard`} exact component={Dashboard}/>
-          <PrivateRoute path={`${process.env.PUBLIC_URL}/`} exact component={Dashboard}/>
-          <PrivateRoute path={`${process.env.PUBLIC_URL}/issue/:id`} component={IssueDetail} />
-          <Route path={`${process.env.PUBLIC_URL}/report`} component={ReportBug} />
+          <PrivateRoute path='/dashboard' exact component={Dashboard}/>
+          <PrivateRoute path='/' exact component={Dashboard}/>
+          <PrivateRoute path='/issue/:id' component={IssueDetail} />
+          <Route path='/report' component={ReportBug} />
         </Router>
       </ProvideAuth>
     </div>

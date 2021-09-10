@@ -12,7 +12,7 @@ export function Login () {
     const { user, setUser } = useContext(authContext);
 
     //already signed in
-    if(user) return <Redirect to={`${process.env.PUBLIC_URL}/dashboard`} />
+    if(user) return <Redirect to='/dashboard' />
 
     async function authenticate(user, pass) {
 

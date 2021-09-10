@@ -18,7 +18,7 @@ export default function IssueDetail () {
             <Container fluid className='issue-detail p-0'>        
                 <div className={'page-title pt-4 pb-4 ' + issueInfo.type}>
                     <Container>
-                        <Link to={`${process.env.PUBLIC_URL}/dashbard`}>Back to Dashboard</Link>
+                        <Link to='/dashboard'>Back to Dashboard</Link>
                         <h1>{issueInfo.subject}</h1>
                         <p>ID: {id}</p>
                     </Container>

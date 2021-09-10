@@ -1,6 +1,6 @@
 {
   "name": "issue-tracker",
-  "homepage" : "https://chadcodes.me/apps/issuetracker",
+  "homepage" : "https://chadcodes.me/apps/issuetracker/",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
